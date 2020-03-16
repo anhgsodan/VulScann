@@ -18,7 +18,7 @@ Vui lòng cài đặt các tệp vào thư mục sau trong quá trình cài đ�
 
 Clone GitHub repository:
 
-    git clone https://github.com/scipag/vulscan scipag_vulscan
+    git clone https://github.com/anhgsodan/VulScann scipag_vulscan
     ln -s `pwd`/scipag_vulscan /usr/share/nmap/scripts/vulscan    
 
 ## Sử dụng
