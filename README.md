@@ -1,35 +1,35 @@
-# vulscan - Vulnerability Scanning with Nmap
+#Vulnerability Scanning with Nmap
 
 <p align="center">
 <img src="./logo.png" width="300px">
 </p>
 
-## Introduction
+## Giới thiệu
 
-Vulscan is a module which enhances nmap to a vulnerability scanner. The nmap option -sV enables version detection per service which is used to determine potential flaws according to the identified product. The data is looked up in an offline version of VulDB.
+Vulscan là một mô-đun nmap để quét lỗ hổng. Tùy chọn nmap -sV cho phép phát hiện phiên bản trên mỗi dịch vụ được sử dụng để xác định các lỗ hổng tiềm năng theo sản phẩm được xác định. Dữ liệu được tra cứu trong phiên bản ngoại tuyến của VulDB.
 
 ![Nmap NSE Vulscan](https://www.computec.ch/projekte/vulscan/introduction/screenshot.png)
 
-## Installation
+## Cài đặt
 
-Please install the files into the following folder of your Nmap installation:
+Vui lòng cài đặt các tệp vào thư mục sau trong quá trình cài đặt Nmap:
 
     Nmap\scripts\vulscan\*
 
-Clone the GitHub repository like this:
+Clone GitHub repository:
 
     git clone https://github.com/scipag/vulscan scipag_vulscan
     ln -s `pwd`/scipag_vulscan /usr/share/nmap/scripts/vulscan    
 
-## Usage
+## Sử dụng
 
-You have to run the following minimal command to initiate a simple vulnerability scan:
+Chạy lệnh sau đây để bắt đầu quét các lỗ hổng đơn giản:
 
     nmap -sV --script=vulscan/vulscan.nse www.example.com
 
-## Vulnerability Database
+## Cơ sở dữ liệu
 
-There are the following pre-installed databases available at the moment:
+Các cơ sở dữ liệu được cài đặt sẵn:
 
 * scipvuldb.csv - https://vuldb.com
 * cve.csv - https://cve.mitre.org
@@ -40,23 +40,23 @@ There are the following pre-installed databases available at the moment:
 * securitytracker.csv - https://www.securitytracker.com (end-of-life)
 * osvdb.csv - http://www.osvdb.org (end-of-life)
 
-## Single Database Mode
+## Cơ sở dữ liệu đơn
 
-You may execute vulscan with the following argument to use a single database:
+Thực thi Vulscan với đối số sau để sử dụng một cơ sở dữ liệu:
 
     --script-args vulscandb=your_own_database
 
-It is also possible to create and reference your own databases. This requires to create a database file, which has the following structure:
+Cũng có thể tạo và tham chiếu cơ sở dữ liệu của riêng bạn. Điều này đòi hỏi phải tạo một tệp cơ sở dữ liệu, có cấu trúc sau:
 
     <id>;<title>
 
-Just execute vulscan like you would by refering to one of the pre-delivered databases. Feel free to share your own database and vulnerability connection with me, to add it to the official repository.
+Chỉ cần thực hiện thủ tục như bạn muốn bằng cách tham chiếu đến một trong các cơ sở dữ liệu được phân phối trước. Hãy chia sẻ cơ sở dữ liệu và kết nối lỗ hổng của riêng bạn với tôi, để tôi thêm nó vào kho lưu trữ.
 
-## Update Database
+## Cập nhật cơ sở dữ liệu
 
-The vulnerability databases are updated and assembled on a regularly basis. To support the latest disclosed vulnerabilities, keep your local vulnerability databases up-to-date.
+Các cơ sở dữ liệu lỗ hổng được cập nhật thường xuyên. Để hỗ trợ các lỗ hổng mới nhất, hãy cập nhật cơ sở dữ liệu của bạn
 
-If you want to update your databases, go to the following web site and download these files:
+Nếu muốn cập nhật cơ sở dữ liệu, hãy truy cập trang web sau và tải xuống các tệp sau:
 
 * https://www.computec.ch/projekte/vulscan/download/cve.csv
 * https://www.computec.ch/projekte/vulscan/download/exploitdb.csv
@@ -67,68 +67,7 @@ If you want to update your databases, go to the following web site and download 
 * https://www.computec.ch/projekte/vulscan/download/securitytracker.csv
 * https://www.computec.ch/projekte/vulscan/download/xforce.csv
 
-Copy the files into your vulscan folder:
+Sao chép các tập tin vào thư mục Vulscan:
 
     /vulscan/
-
-## Version Detection
-
-If the version detection was able to identify the software version and the vulnerability database is providing such details, also this data is matched.
-
-Disabling this feature might introduce false-positive but might also eliminate false-negatives and increase performance slighty. If you want to disable additional version matching, use the following argument:
-
-    --script-args vulscanversiondetection=0
-
-Version detection of vulscan is only as good as Nmap version detection and the vulnerability database entries are. Some databases do not provide conclusive version information, which may lead to a lot of false-positives (as can be seen for Apache servers).
-
-## Match Priority
-
-The script is trying to identify the best matches only. If no positive match could been found, the best possible match (with might be a false-positive) is put on display.
-
-If you want to show all matches, which might introduce a lot of false-positives but might be useful for further investigation, use the following argument:
-
-    --script-args vulscanshowall=1
-
-## Interactive Mode
-
-The interactive mode helps you to override version detection results for every port. Use the following argument to enable the interactive mode:
-
-    --script-args vulscaninteractive=1
-
-## Reporting
-
-All matching results are printed one by line. The default layout for this is:
-
-    [{id}] {title}\n
-
-It is possible to use another pre-defined report structure with the following argument:
-
-    --script-args vulscanoutput=details
-    --script-args vulscanoutput=listid
-    --script-args vulscanoutput=listlink
-    --script-args vulscanoutput=listtitle
-
-You may enforce your own report structure by using the following argument (some examples):
-
-    --script-args vulscanoutput='{link}\n{title}\n\n'
-    --script-args vulscanoutput='ID: {id} - Title: {title} ({matches})\n'
-    --script-args vulscanoutput='{id} | {product} | {version}\n'
-
-Supported are the following elements for a dynamic report template:
-
-* {id} - ID of the vulnerability
-* {title} - Title of the vulnerability
-* {matches} - Count of matches
-* {product} - Matched product string(s)
-* {version} - Matched version string(s)
-* {link} - Link to the vulnerability database entry
-* \n - Newline
-* \t - Tab
-
-Every default database comes with an url and a link, which is used during the scanning and might be accessed as {link} within the customized report template. To use custom database links, use the following argument:
-
-    --script-args "vulscandblink=http://example.org/{id}"
-
-## Disclaimer
-
-Keep in mind that this kind of derivative vulnerability scanning heavily relies on the confidence of the version detection of nmap, the amount of documented vulnerabilities and the accuracy of pattern matching. The existence of potential flaws is not verified with additional scanning nor exploiting techniques.
+hunganhkt@mitec.edu.vn
